@@ -1,8 +1,8 @@
 import streamlit as st
-from gerador import gerar_matriz_de_jogos, gerar_jogos_simples
-from api import obter_ultimo_resultado
-from utils import salvar_em_txt
 import random
+from gerador import gerar_matriz_de_jogos, gerar_jogos_simples
+from api import obter_ultimos_concursos, obter_ultimo_resultado
+from utils import salvar_em_txt, obter_top_dezenas
 
 st.set_page_config(page_title="Mega-Sena Inteligente", layout="centered")
 st.title("🔢 Gerador Inteligente de Jogos - Mega-Sena")
@@ -10,16 +10,16 @@ st.title("🔢 Gerador Inteligente de Jogos - Mega-Sena")
 st.markdown("### 📌 Parâmetros do Jogo")
 qtd_cartoes = st.number_input("Quantidade de cartões", min_value=1, max_value=500, value=10)
 qtd_dezenas = st.number_input("Quantidade de dezenas por cartão", min_value=6, max_value=15, value=6)
-usar_estrategia = st.checkbox("Usar estratégia com dezenas fixas (baseada em matriz)", value=False)
+usar_estrategia = st.checkbox("Usar estratégia com dezenas fixas (baseada em matriz)", value=True)
 
 st.markdown("---")
 if st.button("🎲 Gerar Jogos"):
     if usar_estrategia:
-        dezenas_base = list(range(1, 61))
-        dezenas_escolhidas = sorted(random.sample(dezenas_base, 10))
+        concursos = obter_ultimos_concursos(qtd=20)
+        dezenas_escolhidas = obter_top_dezenas(concursos, top_n=10)
         dezenas_fixas = dezenas_escolhidas[:4]
         jogos = gerar_matriz_de_jogos(dezenas_escolhidas, dezenas_fixas, qtd_cartoes)
-        st.success(f"Jogos gerados com estratégia baseada em matriz! Fixas: {dezenas_fixas}")
+        st.success(f"Jogos gerados com base estatística! Fixas: {dezenas_fixas}")
     else:
         jogos = gerar_jogos_simples(qtd_cartoes, qtd_dezenas)
         st.success("Jogos simples gerados com sucesso!")

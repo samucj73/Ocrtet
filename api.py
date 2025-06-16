@@ -12,8 +12,7 @@ def obter_ultimos_concursos(qtd=20):
     url = f'https://api.guidi.dev.br/loteria/megasena/{qtd}'
     response = requests.get(url)
     response.raise_for_status()
-    dados = response.json()
-    concursos = dados.get('concursos', [])
+    concursos = response.json()  # corrigido: agora trata como lista direta
     resultados = []
     for c in concursos:
         dezenas = c.get('listaDezenas', [])

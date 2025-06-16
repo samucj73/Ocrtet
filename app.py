@@ -2,6 +2,7 @@ import streamlit as st
 from gerador import gerar_matriz_de_jogos, gerar_jogos_simples
 from api import obter_ultimo_resultado
 from utils import salvar_em_txt
+import random
 
 st.set_page_config(page_title="Mega-Sena Inteligente", layout="centered")
 st.title("🔢 Gerador Inteligente de Jogos - Mega-Sena")
